@@ -1,2 +1,3 @@
 # Contact-Tracing
-Contact tracing for Syllabus+
+This repository contains tools to assist contact tracing students through the timetable in Syllabus+.
+
