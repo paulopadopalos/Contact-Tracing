@@ -10,6 +10,13 @@ Public Sub CheckStudentAllocations()
     Dim Coll As SplusServer.College
     Set Coll = App.ActiveCollege
     
+    ' Set up references to our worksheets.
+    On Error GoTo ErrorFindingWorksheets
+    Dim InputSheet As Worksheet
+    Dim OutputSheet As Worksheet
+    Set InputSheet = ThisWorkbook.Worksheets("Data to Check")
+    Set OutputSheet = ThisWorkbook.Worksheets("Results")
+    
     ' Process the initial list of students.
     On Error GoTo ErrorProcessingStudents
     Dim row As Integer
@@ -18,29 +25,29 @@ Public Sub CheckStudentAllocations()
     Dim myStudentSets As SplusServer.StudentSets
     Set myStudentSets = Coll.CreateStudentSets
     row = 2
-    studentHK = Sheet1.Range("A" + Trim(Str(row))).Text
+    studentHK = InputSheet.Range("A" + Trim(Str(row))).Text
     
     While Len(studentHK) > 0
         Select Case Coll.StudentSets.Find(HostKey:=studentHK).Count
             Case 0:
-                Sheet1.Range("B" + Trim(Str(row))).Value = "Student Set Not Found"
+                InputSheet.Range("B" + Trim(Str(row))).Value = "Student Set Not Found"
             Case 1:
                 Set myStudentSet = Coll.StudentSets.Find(HostKey:=studentHK).Item(1)
-                Sheet1.Range("B" + Trim(Str(row))).Value = myStudentSet.Name
+                InputSheet.Range("B" + Trim(Str(row))).Value = myStudentSet.Name
                 Call myStudentSets.Add(myStudentSet)
             Case Else:
-                Sheet1.Range("B" + Trim(Str(row))).Value = "Multiple Student Sets Found"
+                InputSheet.Range("B" + Trim(Str(row))).Value = "Multiple Student Sets Found"
         End Select
         row = row + 1
-        studentHK = Sheet1.Range("A" + Trim(Str(row))).Text
+        studentHK = InputSheet.Range("A" + Trim(Str(row))).Text
     Wend
     
     ' Get the date range parameters we're searching for.
     On Error GoTo ErrorProcessingDatesProvided
     Dim startDateTime As Date
     Dim endDateTime As Date
-    startDateTime = Sheet1.Range("E2").Value
-    endDateTime = Sheet1.Range("F2").Value
+    startDateTime = InputSheet.Range("E2").Value
+    endDateTime = InputSheet.Range("F2").Value
     Dim periodToInvestigate As SplusServer.PeriodInYearPattern
     Set periodToInvestigate = Coll.CreatePeriodInYearPattern
     Call periodToInvestigate.SetByDateTimeRange(startDateTime, endDateTime, True)
@@ -95,6 +102,10 @@ Public Sub CheckStudentAllocations()
     
 CouldConnectToSyllabus:
     MsgBox ("An error occurred when connecting to Syllabus+")
+    Exit Sub
+    
+ErrorFindingWorksheets:
+    MsgBox ("An error occurred when trying to find worksheets named 'Data to Check' and 'Results'")
     Exit Sub
 
 ErrorProcessingStudents:
