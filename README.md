@@ -20,7 +20,7 @@ Note that all of the tools here report on **Student Set** objects, *not* **Stude
 
 ## Student Contact Tracing.rdl and Staff Contact Tracing.rdl
 
-These are SSRS report files to be used with Report Manager. They should work "out of the box" but you may want to change the institution branding and boilerplate text.
+These are SSRS report files to be used with Scientia Report Manager. They should work "out of the box" but you may want to change the institution branding and boilerplate text.
 
 ### How to use
 
