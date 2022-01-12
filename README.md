@@ -30,5 +30,7 @@ These reports can be run directly if you have an SSRS install, but they are also
 - `EndDateTime` which is a Date parameter.
 - `StudentSetId` which is a list of student set IDs.
 
+**IMPORTANT** - the date parameters use midnight of the selected day, so for the end date you want to pick the day *after* the last day of interest - e.g. if you want to report on 1st to 6th January, select 1st to _7th_ January.
+
 The following SQL will work for the `StudentSetId` parameter, and will let you pick ANY of the student sets in S+. 
 `SELECT {HostKey: DISPLAYNAME }, {id : VALUE } FROM rdowner.V_STUDENTSET ORDER BY HostKey ASC`
